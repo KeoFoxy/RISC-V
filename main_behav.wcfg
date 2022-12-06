@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="main_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="main" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="590434fs"></ZoomStartTime>
+      <ZoomEndTime time="647835fs"></ZoomEndTime>
+      <Cursor1Time time="600000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="145"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="21" />
+   <wvobject fp_name="/main/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/OUTPUT_CHECK" type="array">
+      <obj_property name="ElementShortName">OUTPUT_CHECK[31:0]</obj_property>
+      <obj_property name="ObjectShortName">OUTPUT_CHECK[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/IN" type="logic">
+      <obj_property name="ElementShortName">IN</obj_property>
+      <obj_property name="ObjectShortName">IN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/RST" type="logic">
+      <obj_property name="ElementShortName">RST</obj_property>
+      <obj_property name="ObjectShortName">RST</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/PC" type="array">
+      <obj_property name="ElementShortName">PC[7:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/CURRENT_INSTRUCTION" type="array">
+      <obj_property name="ElementShortName">CURRENT_INSTRUCTION[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CURRENT_INSTRUCTION[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/RD1" type="array">
+      <obj_property name="ElementShortName">RD1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RD1[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/RD2" type="array">
+      <obj_property name="ElementShortName">RD2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RD2[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/mux_pc" type="array">
+      <obj_property name="ElementShortName">mux_pc[7:0]</obj_property>
+      <obj_property name="ObjectShortName">mux_pc[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/Flag" type="logic">
+      <obj_property name="ElementShortName">Flag</obj_property>
+      <obj_property name="ObjectShortName">Flag</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/REG31" type="array">
+      <obj_property name="ElementShortName">REG31[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REG31[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/REG1" type="array">
+      <obj_property name="ElementShortName">REG1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REG1[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/REG2" type="array">
+      <obj_property name="ElementShortName">REG2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REG2[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/REG27" type="array">
+      <obj_property name="ElementShortName">REG27[31:0]</obj_property>
+      <obj_property name="ObjectShortName">REG27[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/data_adress" type="array">
+      <obj_property name="ElementShortName">data_adress[4:0]</obj_property>
+      <obj_property name="ObjectShortName">data_adress[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/data_getted" type="logic">
+      <obj_property name="ElementShortName">data_getted</obj_property>
+      <obj_property name="ObjectShortName">data_getted</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/mux_choice" type="array">
+      <obj_property name="ElementShortName">mux_choice[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mux_choice[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/ALU_Result" type="array">
+      <obj_property name="ElementShortName">ALU_Result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ALU_Result[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/IN_ALU" type="array">
+      <obj_property name="ElementShortName">IN_ALU[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IN_ALU[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/ADDR1" type="array">
+      <obj_property name="ElementShortName">ADDR1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ADDR1[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/main/ADDR2" type="array">
+      <obj_property name="ElementShortName">ADDR2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ADDR2[4:0]</obj_property>
+   </wvobject>
+</wave_config>
