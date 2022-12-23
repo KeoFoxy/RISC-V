@@ -7,10 +7,13 @@ module miriscv_ram
   // clock, reset
   input clk_i,
   input rst_n_i,
+  
+  // Dop signals
+  input [31:0] PC,
 
   // instruction memory interface
-  output logic  [31:0]  instr_rdata_o,
-  input         [31:0]  instr_addr_i,
+  output logic  [31:0]  instr_rdata_o, // Выходная инструкция с instr memory -> risc_v
+  input         [31:0]  instr_addr_i, // Адрес инструкции на instr memory 
 
   // data memory interface
   output logic  [31:0]  data_rdata_o,
@@ -40,10 +43,13 @@ module miriscv_ram
   assign instr_rdata_o = mem[(instr_addr_i % RAM_SIZE) / 4];
 
   always@(posedge clk_i) begin
+
     if(!rst_n_i) begin
       data_rdata_o  <= 32'b0;
     end
     else if(data_req_i) begin
+      
+      $display("Addr getted: %b, %d, instruction number: %d, be: %b", data_addr_i, data_wdata_i, PC, data_be_i);        
       data_rdata_o <= mem[(data_addr_i  % RAM_SIZE) / 4];
 
       if(data_we_i && data_be_i[0])

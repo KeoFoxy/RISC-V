@@ -3,7 +3,7 @@
 
 module main_decoder(fetched_instr_i, ex_op_a_sel_o, ex_op_b_sel_o, alu_op_o, mem_req_o,
                     mem_we_o, mem_size_o, gpr_we_a_o, wb_src_sel_o, illegal_instr_o,
-                    branch_o, jal_o, jalr_o); // Модуль декодера
+                    branch_o, jal_o, jalr_o, mem_stall_req_i, enable_pc); // Модуль декодера
 
 input       [31:0]  fetched_instr_i; // Инструкция для декодирования, считанная из памяти инструкций
 output  reg [1:0]   ex_op_a_sel_o; // Управляющий сигнал мультиплексора для выбора первого операнда АЛУ     
@@ -18,12 +18,23 @@ output  reg         illegal_instr_o; // Сигнал о некорректной инструкции (на схе
 output  reg         branch_o; // Сигнал об инструкции условного перехода           
 output  reg         jal_o; // Сигнал об инструкции безусловного перехода jal              
 output  reg         jalr_o; // Сигнал об инструкции безусловного перехода jalr              
+// LR5 Added:
+input mem_stall_req_i;
+output enable_pc;
 
+assign enable_pc = !mem_stall_req_i;
 
+logic reg_file_we;
+logic gpr_we_tmp;
+assign gpr_we_a_o = enable_pc & gpr_we_tmp;
 // Decoder code:
 always @(*) begin
+// gpr_we_a_o = enable_pc && ~illegal_instr_o;
+
+reg_file_we <= !illegal_instr_o; 
 if (fetched_instr_i[1:0] == 2'b11 || (fetched_instr_i[6:2] == `MISC_MEM_OPCODE || fetched_instr_i[6:2] == `SYSTEM_OPCODE))
 begin
+
 case(fetched_instr_i[6:2])
 `OP_OPCODE:  // Арифметическая операция(R-type) [1]
  begin
@@ -35,7 +46,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0; // Запрос на доступ data memory
     mem_we_o = 0; // Запрос на запись в память data memory
     mem_size_o = 0; // Выбор размера слова при W/R в data memory
-    gpr_we_a_o = 1; // Запись в регистровый файл 
+    gpr_we_tmp = 1; // Запись в регистровый файл 
     wb_src_sel_o = `WB_EX_RESULT; // пишем непосредственно с ALU
     
     illegal_instr_o = 0; // Пока что оставим без изменений
@@ -72,7 +83,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 1; // Пишем в регистровый файл
+    gpr_we_tmp = 1; // Пишем в регистровый файл
     wb_src_sel_o = `WB_EX_RESULT;
     illegal_instr_o = 0;
     
@@ -116,7 +127,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 1; 
+    gpr_we_tmp = 1; 
     wb_src_sel_o = `WB_EX_RESULT;
     
     illegal_instr_o = 0;
@@ -146,7 +157,7 @@ case(fetched_instr_i[6:2])
         default: illegal_instr_o = 1;
     endcase   
 
-    gpr_we_a_o = 1; // Пишем
+    gpr_we_tmp = 1; // Пишем
     wb_src_sel_o = `WB_LSU_DATA ; // Берем с data memory
     
 
@@ -175,7 +186,7 @@ case(fetched_instr_i[6:2])
         default: illegal_instr_o = 1;
     endcase
 
-    gpr_we_a_o = 0; // В регистровый файл не пишем
+    gpr_we_tmp = 0; // В регистровый файл не пишем
     wb_src_sel_o = 0; // Здесь вообще не важно, в рег. файл ничего не идет
     
     // Переход не осуществляется
@@ -203,7 +214,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0; // Обращение к памяти не требуется
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 0; // В RF ничего не пишем
+    gpr_we_tmp = 0; // В RF ничего не пишем
     wb_src_sel_o = 0; // По барабану
     
     branch_o = 1; // Сигнал условного перехода
@@ -221,7 +232,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 1; // Пишем в файл
+    gpr_we_tmp = 1; // Пишем в файл
     
     wb_src_sel_o = `WB_EX_RESULT;
     illegal_instr_o = 0;
@@ -240,17 +251,17 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 1;
+    gpr_we_tmp = 1;
     wb_src_sel_o = `WB_EX_RESULT;
     
     case(fetched_instr_i[14:12])
     3'h0: begin
-        gpr_we_a_o = 1;
+        gpr_we_tmp = 1;
         illegal_instr_o = 0;
         jalr_o = 1;
     end
     default: begin
-        gpr_we_a_o = 0;
+        gpr_we_tmp = 0;
         illegal_instr_o = 1;
         jalr_o = 0;     
     end
@@ -271,7 +282,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 1;
+    gpr_we_tmp = 1;
     wb_src_sel_o = `WB_EX_RESULT;
     
     illegal_instr_o = 0;
@@ -289,7 +300,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 0;
+    gpr_we_tmp = 0;
     wb_src_sel_o = 0;
     if (fetched_instr_i[1:0] == 2'b11) illegal_instr_o = 0;
     else illegal_instr_o = 1;
@@ -305,7 +316,7 @@ case(fetched_instr_i[6:2])
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 0;
+    gpr_we_tmp = 0;
     wb_src_sel_o = 0;
     if (fetched_instr_i[1:0] == 2'b11) illegal_instr_o = 0;
     else illegal_instr_o = 1;
@@ -328,7 +339,7 @@ end else begin
     mem_req_o = 0;
     mem_we_o = 0;
     mem_size_o = 0;
-    gpr_we_a_o = 0;
+    gpr_we_tmp = 0;
     wb_src_sel_o = 0;
     branch_o = 0;
     jal_o = 0;
@@ -337,4 +348,5 @@ end
 end
 
 endmodule
+
 

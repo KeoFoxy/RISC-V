@@ -4,11 +4,12 @@ module miriscv_top
   parameter RAM_INIT_FILE = ""
 )
 (
-  // clock, reset
+  // clock, reset (Приходят сюда из тестбенча)
   input clk_i,
   input rst_n_i
 );
-
+  
+  // I - input | O - output | core - to risc_v main body
   logic  [31:0]  instr_rdata_core;
   logic  [31:0]  instr_addr_core;
 
@@ -36,8 +37,9 @@ module miriscv_top
   assign data_addr_ram    =  data_addr_core;
   assign data_wdata_ram   =  data_wdata_core;
 
-  miriscv_core core (
-    .clk_i   ( clk_i   ),
+  // RISC V core object 
+  risc_v core (
+    .clk_i   ( clk_i ),
     .arstn_i ( rst_n_i ),
 
     .instr_rdata_i ( instr_rdata_core ),
@@ -51,6 +53,7 @@ module miriscv_top
     .data_wdata_o  ( data_wdata_core  )
   );
 
+  // Risc v ram object
   miriscv_ram
   #(
     .RAM_SIZE      (RAM_SIZE),
@@ -58,6 +61,7 @@ module miriscv_top
   ) ram (
     .clk_i   ( clk_i   ),
     .rst_n_i ( rst_n_i ),
+    .PC( instr_addr_core ),
 
     .instr_rdata_o ( instr_rdata_core ),
     .instr_addr_i  ( instr_addr_core  ),

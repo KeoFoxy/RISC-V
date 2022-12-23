@@ -12,7 +12,7 @@ module tb_miriscv_top();
 
   miriscv_top #(
     .RAM_SIZE       ( RAM_SIZE           ),
-    .RAM_INIT_FILE  ( "program_sort.dat" )
+    .RAM_INIT_FILE  ( "ram_instr.mem" )
   ) dut (
     .clk_i    ( clk   ),
     .rst_n_i  ( rst_n )
